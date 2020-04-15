@@ -1,2 +1,2 @@
-# agility2
+# agility
 A tool to support agile-teams.
