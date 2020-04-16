@@ -4,7 +4,7 @@ function App() {
         return (
                 <div className="app">
                         <style jsx>{`
-                                .app {
+                                .tables {
                                         margin: 1rem auto;
                                         width: 900pt;
                                 }
@@ -60,75 +60,89 @@ function App() {
                                 }
                         `}</style>
                         <h1>Agility</h1>
-                        <h2>All</h2>
-                        <table className="metric-table">
-                                <tr>
-                                        <th className="metric-category"></th>
-                                        <th className="sprint">s11</th>
-                                        <th className="sprint">s12</th>
-                                </tr>
-                                <tr>
-                                        <th>Commitment</th>
-                                        <td></td>
-                                        <td></td>
-                                </tr>
-                                <tr>
-                                        <th>Done</th>
-                                        <td></td>
-                                        <td></td>
-                                </tr>
-                                <tr>
-                                        <th>Velocity</th>
-                                        <td></td>
-                                        <td></td>
-                                </tr>
-                        </table>
-                        <h2>SRE 0</h2>
-                        <table className="metric-table">
-                                <tr>
-                                        <th className="metric-category"></th>
-                                        <th className="sprint">s11</th>
-                                        <th className="sprint">s12</th>
-                                </tr>
-                                <tr>
-                                        <th>Commitment</th>
-                                        <td>20 (5)</td>
-                                        <td></td>
-                                </tr>
-                                <tr>
-                                        <th>Done</th>
-                                        <td></td>
-                                        <td></td>
-                                </tr>
-                                <tr>
-                                        <th>Velocity</th>
-                                        <td></td>
-                                        <td></td>
-                                </tr>
-                        </table>
-                        <h2>SRE 1+2</h2>
-                        <table className="metric-table">
-                                <tr>
-                                        <th className="metric-category"></th>
-                                        <th className="sprint">s11</th>
-                                        <th className="sprint">s12</th>
-                                </tr>
-                                <tr>
-                                        <th>Commitment</th>
-                                        <td></td>
-                                        <td></td>
-                                </tr>
-                                <tr>
-                                        <th>Done</th>
-                                        <td></td>
-                                        <td></td>
-                                </tr>
-                                <tr>
-                                        <th>Velocity</th>
-                                        <td></td>
-                                        <td></td>
-                                </tr>
-                        </table>
+                        <div className="tables">
+                                <h2>All</h2>
+                                <table className="metric-table">
+                                        <thead>
+                                                <tr>
+                                                        <th className="metric-category"></th>
+                                                        <th className="sprint">s11</th>
+                                                        <th className="sprint">s12</th>
+                                                </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <th>Commitment</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                </tr>
+                                                <tr>
+                                                        <th>Done</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                </tr>
+                                                <tr>
+                                                        <th>Velocity</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                </tr>
+                                        </tbody>
+                                </table>
+                                <h2>SRE 0</h2>
+                                <table className="metric-table">
+                                        <thead>
+                                                <tr>
+                                                        <th className="metric-category"></th>
+                                                        <th className="sprint">s11</th>
+                                                        <th className="sprint">s12</th>
+                                                </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <th>Commitment</th>
+                                                        <td>20 (5)</td>
+                                                        <td></td>
+                                                </tr>
+                                                <tr>
+                                                        <th>Done</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                </tr>
+                                                <tr>
+                                                        <th>Velocity</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                </tr>
+                                        </tbody>
+                                </table>
+                                <h2>SRE 1+2</h2>
+                                <table className="metric-table">
+                                        <thead>
+                                                <tr>
+                                                        <th className="metric-category"></th>
+                                                        <th className="sprint">s11</th>
+                                                        <th className="sprint">s12</th>
+                                                </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <th>Commitment</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                </tr>
+                                                <tr>
+                                                        <th>Done</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                </tr>
+                                                <tr>
+                                                        <th>Velocity</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                </tr>
+                                        </tbody>
+                                </table>
+                        </div>
                 </div>
         );
 }
