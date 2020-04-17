@@ -1,9 +1,13 @@
 package rest
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
-func NewRouter() *gin.Engine {
+func NewRouter(sh *SprintHandler) *gin.Engine {
 	r := gin.Default()
+
+	r.GET("/v1/sprints", sh.GET)
 
 	r.StaticFile("/main.js", "/usr/share/agility/assets/main.js")
 	r.StaticFile("/main.css", "/usr/share/agility/assets/main.css")
