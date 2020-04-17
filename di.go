@@ -10,7 +10,11 @@ type DI struct {
 }
 
 func (di DI) Router() *gin.Engine {
-	return rest.NewRouter()
+	return rest.NewRouter(di.SprintHandler())
+}
+
+func (di DI) SprintHandler() *rest.SprintHandler {
+	return &rest.SprintHandler{}
 }
 
 func (DI) Config() config.Config {
