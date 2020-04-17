@@ -1,8 +1,16 @@
 package config
 
+import (
+	"os"
+	"strings"
+)
+
 type Config struct {
+	Teams []string
 }
 
 func FromEnv() (Config, error) {
-	return Config{}, nil
+	return Config{
+		Teams: strings.Split(os.Getenv("TEAMS"), ","),
+	}, nil
 }
