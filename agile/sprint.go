@@ -3,15 +3,21 @@ package agile
 import "math"
 
 type Sprint struct {
+	sprint int
 	issues []Issue
 	done   bool
 }
 
-func NewSprint() Sprint {
+func NewSprint(sprint int) Sprint {
 	return Sprint{
+		sprint: sprint,
 		issues: []Issue{},
 		done:   false,
 	}
+}
+
+func (s Sprint) Sprint() int {
+	return s.sprint
 }
 
 func (s Sprint) AddIssue(issue Issue) {
