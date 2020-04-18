@@ -116,6 +116,7 @@ func (s *Service) Sprint(sprint string, done bool) (agile.Sprint, error) {
 
 	sp := agile.NewSprint(sprint)
 	sp.SetDone(done)
+
 	is, err := s.GetIssues(sprint)
 	if err != nil {
 		return agile.Sprint{}, err
