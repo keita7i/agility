@@ -51,7 +51,7 @@ func (s Sprint) AllVelocity(lastSprints []Sprint) int {
 		return -1
 	}
 	sum := s.AllDone()
-	for i := len(lastSprints); 0 < i && len(lastSprints)-2 < i; i-- {
+	for i := 0; i < 2 && i < len(lastSprints); i++ {
 		sum += lastSprints[i].AllDone()
 	}
 	return int(math.Round(float64(sum) / 3))
@@ -82,8 +82,8 @@ func (s Sprint) Velocity(team string, lastSprints []Sprint) int {
 		return -1
 	}
 	sum := s.Done(team)
-	for i := len(lastSprints); 0 < i && len(lastSprints)-2 < i; i-- {
-		sum += lastSprints[i-1].Done(team)
+	for i := 0; i < 2 && i < len(lastSprints); i++ {
+		sum += lastSprints[i].Done(team)
 	}
 	return int(math.Round(float64(sum) / 3))
 }
