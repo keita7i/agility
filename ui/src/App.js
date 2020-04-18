@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
 function App() {
+        let [teams, setTeams] = useState([]);
         let [sprints, setSprints] = useState([]);
+
+        function loadTeams(f) {
+                fetch('/v1/teams').then(res => {
+                        res.json().then(ts => {
+                                f(ts);
+                        });
+                })
+        }
 
         function loadSprints(f) {
                 fetch('/v1/sprints').then((res) => {
@@ -12,7 +21,10 @@ function App() {
         }
 
         useEffect(() => {
-                loadSprints((ss) => {
+                loadTeams(ts => {
+                        setTeams(ts);
+                });
+                loadSprints(ss => {
                         setSprints(ss);
                 });
         }, []);
@@ -122,8 +134,7 @@ function App() {
                         <h1>Agility</h1>
                         <div className="tables">
                                 {metricTable('All')}
-                                {metricTable('SRE 0')}
-                                {metricTable('SRE 1+2')}
+                                {teams.map(t => metricTable(t))}
                         </div>
                 </div>
         );

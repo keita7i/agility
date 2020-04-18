@@ -19,12 +19,12 @@ func (sh *SprintHandler) GET(ctx *gin.Context) {
 					Done: 10,
 					Velocity: 10,
 				},
-				"SRE 0": {
+				"SRE0": {
 					Commitment: 10,
 					Done: 10,
 					Velocity: 10,
 				},
-				"SRE 1+2": {
+				"SRE1+2": {
 					Commitment: 10,
 					Done: 10,
 					Velocity: 10,
