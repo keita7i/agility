@@ -1,18 +1,20 @@
 package rest
 
 import (
+	"ghe.corp.yahoo.co.jp/pivotal-cf/agility2/application"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type SprintHandler struct {
+	ApplicationService application.Service
 }
 
 func (sh *SprintHandler) GET(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, []SprintResponse{
 		{
-			Sprint: "s12",
+			Sprint: 12,
 			Teams: map[string]TeamMetrics{
 				"All": {
 					Commitment: 10,

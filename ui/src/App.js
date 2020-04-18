@@ -83,7 +83,7 @@ function App() {
                         `}</style>
                         <th className="metric-category"></th>
                         {sprints.map((s, i) => {
-                                return <th className="sprint" key={i}>{s.sprint}</th>;
+                                return <th className="sprint" key={i}>s{s.sprint}</th>;
                         })}
                 </tr>);
         }
