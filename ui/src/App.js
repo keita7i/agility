@@ -110,7 +110,8 @@ function App() {
                         `}</style>
                         <th>{category}</th>
                         {sprints.map((s, i) => {
-                                return <td key={i}>{s.teams[team][category.toLowerCase()]}</td>;
+                                let metric = s.teams[team][category.toLowerCase()];
+                                return <td key={i}>{metric >= 0 ? metric : null}</td>;
                         })}
                 </tr>);
         }
