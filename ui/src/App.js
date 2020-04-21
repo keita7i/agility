@@ -15,6 +15,7 @@ function App() {
         function loadSprints(f) {
                 fetch('/v1/sprints').then((res) => {
                         res.json().then((ss) => {
+                                ss.reverse();
                                 f(ss);
                         });
                 });
