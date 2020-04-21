@@ -1,37 +1,41 @@
 package rest
 
 import (
-	"ghe.corp.yahoo.co.jp/pivotal-cf/agility2/application"
 	"net/http"
+
+	"github.com/keitam913/agility/application"
 
 	"github.com/gin-gonic/gin"
 )
 
 type SprintHandler struct {
-	ApplicationService application.Service
+	ApplicationService *application.Service
+	Teams              []string
 }
 
 func (sh *SprintHandler) GET(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, []SprintResponse{
-		{
-			Sprint: 12,
-			Teams: map[string]TeamMetrics{
-				"All": {
-					Commitment: 10,
-					Done: 10,
-					Velocity: 10,
-				},
-				"SRE0": {
-					Commitment: 10,
-					Done: 10,
-					Velocity: 10,
-				},
-				"SRE1+2": {
-					Commitment: 10,
-					Done: 10,
-					Velocity: 10,
-				},
-			},
-		},
-	})
+	sps, err := sh.ApplicationService.LastSprints(2)
+	if err != nil {
+		panic(err)
+	}
+	srs := make([]SprintResponse, 0)
+	for i, sp := range sps {
+		sr := SprintResponse{}
+		sr.Sprint = float32(sp.Sprint())
+		sr.Teams = make(map[string]TeamMetrics, 0)
+		sr.Teams["All"] = TeamMetrics{
+			Commitment: sp.AllCommitment(),
+			Done:       sp.AllDone(),
+			Velocity:   sp.AllVelocity(sps[i+1:]),
+		}
+		for _, t := range sh.Teams {
+			sr.Teams[t] = TeamMetrics{
+				Commitment: sp.Commitment(t),
+				Done:       sp.Done(t),
+				Velocity:   sp.Velocity(t, sps[i+1:]),
+			}
+		}
+		srs = append(srs, sr)
+	}
+	ctx.JSON(http.StatusOK, srs)
 }

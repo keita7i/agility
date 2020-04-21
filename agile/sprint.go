@@ -1,6 +1,8 @@
 package agile
 
-import "math"
+import (
+	"math"
+)
 
 type Sprint struct {
 	sprint int
@@ -20,11 +22,15 @@ func (s Sprint) Sprint() int {
 	return s.sprint
 }
 
-func (s Sprint) AddIssue(issue Issue) {
+func (s *Sprint) AddIssue(issue Issue) {
 	s.issues = append(s.issues, issue)
 }
 
-func (s Sprint) SetDone(done bool) {
+func (s Sprint) Issues() []Issue {
+	return s.issues
+}
+
+func (s *Sprint) SetDone(done bool) {
 	s.done = done
 }
 

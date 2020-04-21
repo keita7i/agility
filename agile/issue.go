@@ -15,6 +15,7 @@ func NewIssue(size int, labels []string, status int) Issue {
 	return Issue{
 		size:   size,
 		labels: labels,
+		status: status,
 	}
 }
 
