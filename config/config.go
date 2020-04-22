@@ -11,6 +11,7 @@ type Config struct {
 	JIRAUsername    string
 	JIRAPassword    string
 	JIRAProject     string
+	JIRABoardID     string
 }
 
 func FromEnv() (Config, error) {
@@ -20,5 +21,6 @@ func FromEnv() (Config, error) {
 		JIRAUsername:    os.Getenv("JIRA_USERNAME"),
 		JIRAPassword:    os.Getenv("JIRA_PASSWORD"),
 		JIRAProject:     os.Getenv("JIRA_PROJECT"),
+		JIRABoardID:     os.Getenv("JIRA_BOARD_ID"),
 	}, nil
 }
