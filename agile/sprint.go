@@ -2,12 +2,14 @@ package agile
 
 import (
 	"math"
+	"time"
 )
 
 type Sprint struct {
-	sprint int
-	issues []Issue
-	done   bool
+	sprint    int
+	issues    []Issue
+	startedAt time.Time
+	done      bool
 }
 
 func NewSprint(sprint int) Sprint {
@@ -22,8 +24,16 @@ func (s Sprint) Sprint() int {
 	return s.sprint
 }
 
+func (s *Sprint) Start(at time.Time) {
+	s.startedAt = at
+}
+
 func (s *Sprint) AddIssue(issue Issue) {
 	s.issues = append(s.issues, issue)
+}
+
+func (s Sprint) StartedAt() time.Time {
+	return s.startedAt
 }
 
 func (s Sprint) Issues() []Issue {
