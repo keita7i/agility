@@ -1,7 +1,7 @@
 package rest
 
 type SprintResponse struct {
-	Sprint float32                `json:"sprint"`
+	Sprint string                 `json:"sprint"`
 	Teams  map[string]TeamMetrics `json:"teams"`
 }
 

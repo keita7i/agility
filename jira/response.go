@@ -20,3 +20,16 @@ type Fields struct {
 type Status struct {
 	Name string `json:"name"`
 }
+
+type SprintResponse struct {
+	StartAt    float32  `json:"startAt"`
+	MaxResults float32  `json:"maxResults"`
+	IsLast     bool     `json:"isLast"`
+	Values     []Sprint `json:"values"`
+}
+
+type Sprint struct {
+	Name      string `json:"name"`
+	State     string `json:"state"`
+	StartDate string `json:"startDate"`
+}

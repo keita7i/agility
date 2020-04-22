@@ -6,13 +6,13 @@ import (
 )
 
 type Sprint struct {
-	sprint    int
+	sprint    string
 	issues    []Issue
 	startedAt time.Time
 	done      bool
 }
 
-func NewSprint(sprint int) Sprint {
+func NewSprint(sprint string) Sprint {
 	return Sprint{
 		sprint: sprint,
 		issues: []Issue{},
@@ -20,7 +20,7 @@ func NewSprint(sprint int) Sprint {
 	}
 }
 
-func (s Sprint) Sprint() int {
+func (s Sprint) Sprint() string {
 	return s.sprint
 }
 

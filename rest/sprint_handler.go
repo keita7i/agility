@@ -21,7 +21,7 @@ func (sh *SprintHandler) GET(ctx *gin.Context) {
 	srs := make([]SprintResponse, 0)
 	for i, sp := range sps {
 		sr := SprintResponse{}
-		sr.Sprint = float32(sp.Sprint())
+		sr.Sprint = sp.Sprint()
 		sr.Teams = make(map[string]TeamMetrics, 0)
 		sr.Teams["All"] = TeamMetrics{
 			Commitment: sp.AllCommitment(),
