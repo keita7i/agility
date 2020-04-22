@@ -30,9 +30,9 @@ function App() {
                 });
         }, []);
 
-        function metricTable(team) {
+        function metricTable(team, key) {
                 return (
-                        <div>
+                        <div key={key}>
                                 <style jsx>{`
                                         h2 {
                                                 color: #666;
@@ -136,7 +136,7 @@ function App() {
                         <h1>Agility</h1>
                         <div className="tables">
                                 {metricTable('All')}
-                                {teams.map(t => metricTable(t))}
+                                {teams.map((t, key) => metricTable(t, key))}
                         </div>
                 </div>
         );
