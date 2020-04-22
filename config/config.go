@@ -10,7 +10,7 @@ type Config struct {
 	JIRAAPIEndpoint string
 	JIRAUsername    string
 	JIRAPassword    string
-	JIRAProject     string
+	JIRAProjectKey  string
 	JIRABoardID     string
 }
 
@@ -20,7 +20,7 @@ func FromEnv() (Config, error) {
 		JIRAAPIEndpoint: os.Getenv("JIRA_API_ENDPOINT"),
 		JIRAUsername:    os.Getenv("JIRA_USERNAME"),
 		JIRAPassword:    os.Getenv("JIRA_PASSWORD"),
-		JIRAProject:     os.Getenv("JIRA_PROJECT"),
+		JIRAProjectKey:  os.Getenv("JIRA_PROJECT_KEY"),
 		JIRABoardID:     os.Getenv("JIRA_BOARD_ID"),
 	}, nil
 }
