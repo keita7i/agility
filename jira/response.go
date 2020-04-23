@@ -1,5 +1,9 @@
 package jira
 
+const (
+	SprintClosed = "closed"
+)
+
 type IssueResponse struct {
 	StartAt    float32 `json:"startAt"`
 	MaxResults float32 `json:"maxResults"`
