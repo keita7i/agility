@@ -37,10 +37,10 @@ func (di DI) ApplicationService() *application.Service {
 func (di DI) JIRAService() application.JIRAService {
 	conf := di.Config()
 	return &jira.Service{
-		Project:     conf.JIRAProjectKey,
 		APIEndpoint: conf.JIRAAPIEndpoint,
 		Username:    conf.JIRAUsername,
 		Password:    conf.JIRAPassword,
+		BoardID:     conf.JIRABoardID,
 	}
 }
 
