@@ -44,6 +44,10 @@ func (s *Sprint) SetDone(done bool) {
 	s.done = done
 }
 
+func (s Sprint) HasClosed() bool {
+	return s.done
+}
+
 func (s Sprint) AllCommitment() int {
 	c := 0
 	for _, i := range s.issues {
