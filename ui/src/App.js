@@ -82,7 +82,7 @@ function App() {
 
                                 }
                         `}</style>
-                        <th className="metric-category"></th>
+                        <th className="metric-category">Sprint</th>
                         {sprints.map((s, i) => {
                                 return <th className="sprint" key={i}>{s.sprint}</th>;
                         })}
