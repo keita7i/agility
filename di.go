@@ -1,8 +1,6 @@
 package main
 
 import (
-	"sync"
-
 	"github.com/gin-gonic/gin"
 	"github.com/keitam913/agility/application"
 	"github.com/keitam913/agility/config"
@@ -43,7 +41,6 @@ func (di DI) JIRAService() application.JIRAService {
 		Username:    conf.JIRAUsername,
 		Password:    conf.JIRAPassword,
 		BoardID:     conf.JIRABoardID,
-		SprintCache: &sync.Map{},
 	}
 }
 

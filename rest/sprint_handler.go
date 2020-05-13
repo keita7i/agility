@@ -14,7 +14,7 @@ type SprintHandler struct {
 }
 
 func (sh *SprintHandler) GET(ctx *gin.Context) {
-	sps, err := sh.ApplicationService.LastSprints(8)
+	sps, err := sh.ApplicationService.LastSprints(2)
 	if err != nil {
 		panic(err)
 	}

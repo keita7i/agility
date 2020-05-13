@@ -12,7 +12,6 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"sync"
 
 	"github.com/keitam913/agility/agile"
 )
@@ -24,7 +23,6 @@ type Service struct {
 	Username    string
 	Password    string
 	BoardID     string
-	SprintCache *sync.Map
 }
 
 func (s *Service) LastSprints(max int) ([]agile.Sprint, error) {
@@ -109,11 +107,6 @@ func (s *Service) GetRawSprints() ([]Sprint, error) {
 }
 
 func (s *Service) Sprint(sprint string, done bool) (agile.Sprint, error) {
-	si, ok := s.SprintCache.Load(sprint)
-	if ok {
-		return si.(agile.Sprint), nil
-	}
-
 	sp := agile.NewSprint(sprint)
 	sp.SetDone(done)
 	is, err := s.GetIssues(sprint)
@@ -127,10 +120,6 @@ func (s *Service) Sprint(sprint string, done bool) (agile.Sprint, error) {
 		}
 		sp.AddIssue(agile.NewIssue(int(i.Fields.Size), i.Fields.Labels, st))
 	}
-	if sp.HasClosed() {
-		s.SprintCache.Store(sprint, sp)
-	}
-
 	return sp, nil
 }
 
