@@ -16,9 +16,10 @@ type Issue struct {
 }
 
 type Fields struct {
-	Status Status   `json:"status"`
-	Labels []string `json:"labels"`
-	Size   float32  `json:"customfield_10002"`
+	Status        Status   `json:"status"`
+	Labels        []string `json:"labels"`
+	Size          float32  `json:"customfield_10002"`
+	ClosedSprints []Sprint `json:"closedSprints"`
 }
 
 type Status struct {

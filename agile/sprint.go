@@ -59,7 +59,7 @@ func (s Sprint) AllCommitment() int {
 func (s Sprint) AllDone() int {
 	c := 0
 	for _, i := range s.issues {
-		if i.HasDone() {
+		if i.DoneSprint() == s.Sprint() {
 			c += i.Size()
 		}
 	}
@@ -90,7 +90,7 @@ func (s Sprint) Commitment(team string) int {
 func (s Sprint) Done(team string) int {
 	c := 0
 	for _, i := range s.issues {
-		if i.HasCommittedBy(team) && i.HasDone() {
+		if i.HasCommittedBy(team) && i.DoneSprint() == s.Sprint() {
 			c += i.Size()
 		}
 	}

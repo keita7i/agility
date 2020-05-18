@@ -57,11 +57,11 @@ func (s *Service) sprint(sprint string, done bool) (agile.Sprint, error) {
 		return agile.Sprint{}, err
 	}
 	for _, i := range is {
-		st := agile.StatusInProgress
-		if i.Fields.Status.Name == "完了" {
-			st = agile.StatusDone
+		closedSprint := ""
+		if len(i.Fields.ClosedSprints) > 0 {
+			closedSprint = i.Fields.ClosedSprints[0].Name
 		}
-		sp.AddIssue(agile.NewIssue(int(i.Fields.Size), i.Fields.Labels, st))
+		sp.AddIssue(agile.NewIssue(int(i.Fields.Size), i.Fields.Labels, closedSprint))
 	}
 	return sp, nil
 }

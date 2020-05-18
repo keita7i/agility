@@ -1,21 +1,16 @@
 package agile
 
-const (
-	StatusInProgress = iota + 1
-	StatusDone
-)
-
 type Issue struct {
-	size   int
-	labels []string
-	status int
+	size       int
+	labels     []string
+	doneSprint string
 }
 
-func NewIssue(size int, labels []string, status int) Issue {
+func NewIssue(size int, labels []string, doneSprint string) Issue {
 	return Issue{
-		size:   size,
-		labels: labels,
-		status: status,
+		size:       size,
+		labels:     labels,
+		doneSprint: doneSprint,
 	}
 }
 
@@ -24,7 +19,11 @@ func (i Issue) Size() int {
 }
 
 func (i Issue) HasDone() bool {
-	return i.status == StatusDone
+	return i.doneSprint != ""
+}
+
+func (i Issue) DoneSprint() string {
+	return i.doneSprint
 }
 
 func (i Issue) HasCommittedBy(team string) bool {
