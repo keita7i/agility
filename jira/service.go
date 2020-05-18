@@ -52,7 +52,7 @@ func (s *Service) LastSprints(max int) ([]agile.Sprint, error) {
 func (s *Service) sprint(sprint string, done bool) (agile.Sprint, error) {
 	sp := agile.NewSprint(sprint)
 	sp.SetDone(done)
-	is, err := s.Client.Issues(sprint)
+	is, err := s.Client.Issues(sprint, done)
 	if err != nil {
 		return agile.Sprint{}, err
 	}

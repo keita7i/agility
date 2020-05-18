@@ -14,7 +14,7 @@ import (
 
 type Client interface {
 	Sprints() ([]Sprint, error)
-	Issues(sprint string) ([]Issue, error)
+	Issues(sprint string, sprintDone bool) ([]Issue, error)
 }
 
 func NewClient(apiEndpont, username, password, boardID string) Client {
@@ -75,7 +75,7 @@ func (c *client) Sprints() ([]Sprint, error) {
 	return ss, nil
 }
 
-func (c *client) Issues(sprint string) ([]Issue, error) {
+func (c *client) Issues(sprint string, sprintDone bool) ([]Issue, error) {
 	var issues []Issue
 	total := math.MaxInt32
 	maxResults := 0
