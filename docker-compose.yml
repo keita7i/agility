@@ -14,6 +14,8 @@ services:
     command: [go, run, .]
     env_file:
     - dev.env
+    links:
+    - "redis:redis"
   webpack:
     image: node:12
     container_name: agility_webpack
@@ -21,3 +23,6 @@ services:
     - ./ui:/build
     working_dir: /build
     command: [npm, run, watch]
+  redis:
+    image: redis:6
+    container_name: agility_redis
