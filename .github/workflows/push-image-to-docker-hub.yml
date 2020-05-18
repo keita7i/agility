@@ -1,0 +1,17 @@
+name: Push Image to Docker Hub
+on: [push]
+
+jobs:
+  push-image:
+    name: Push Image
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Push Image
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERANME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: keitam913/agility
+        tags: latest
