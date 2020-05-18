@@ -5,6 +5,7 @@ import (
 	"github.com/keitam913/agility/application"
 	"github.com/keitam913/agility/config"
 	"github.com/keitam913/agility/jira"
+	"github.com/keitam913/agility/redis"
 	"github.com/keitam913/agility/rest"
 )
 
@@ -42,7 +43,9 @@ func (di DI) JIRAService() application.JIRAService {
 
 func (di DI) JIRAClient() jira.Client {
 	conf := di.Config()
-	return jira.NewClient(conf.JIRAAPIEndpoint, conf.JIRAUsername, conf.JIRAPassword, conf.JIRABoardID)
+	return &redis.CachedJIRAClient{
+		JIRAClient: jira.NewClient(conf.JIRAAPIEndpoint, conf.JIRAUsername, conf.JIRAPassword, conf.JIRABoardID),
+	}
 }
 
 func (DI) Config() config.Config {
