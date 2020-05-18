@@ -35,8 +35,14 @@ func (di DI) ApplicationService() *application.Service {
 }
 
 func (di DI) JIRAService() application.JIRAService {
-	conf := di.Config()
 	return &jira.Service{
+		Client: di.JIRAClient(),
+	}
+}
+
+func (di DI) JIRAClient() *jira.Client {
+	conf := di.Config()
+	return &jira.Client{
 		APIEndpoint: conf.JIRAAPIEndpoint,
 		Username:    conf.JIRAUsername,
 		Password:    conf.JIRAPassword,
