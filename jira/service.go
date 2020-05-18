@@ -57,9 +57,13 @@ func (s *Service) sprint(sprint string, done bool) (agile.Sprint, error) {
 		return agile.Sprint{}, err
 	}
 	for _, i := range is {
+		css := append([]Sprint{}, i.Fields.ClosedSprints...)
+		sort.Slice(css, func(i, j int) bool {
+			return s.CompareSprint(css[i], css[j]) > 0
+		})
 		closedSprint := ""
-		if len(i.Fields.ClosedSprints) > 0 {
-			closedSprint = i.Fields.ClosedSprints[0].Name
+		if len(css) > 0 {
+			closedSprint = css[0].Name
 		}
 		sp.AddIssue(agile.NewIssue(int(i.Fields.Size), i.Fields.Labels, closedSprint))
 	}
