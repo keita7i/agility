@@ -11,7 +11,7 @@ import (
 var SprintNameRegex = regexp.MustCompile(`^[Ss](\d+)$`)
 
 type Service struct {
-	Client *Client
+	Client Client
 }
 
 func (s *Service) LastSprints(max int) ([]agile.Sprint, error) {

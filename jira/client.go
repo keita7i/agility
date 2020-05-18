@@ -12,14 +12,28 @@ import (
 	"strings"
 )
 
-type Client struct {
+type Client interface {
+	Sprints() ([]Sprint, error)
+	Issues(sprint string) ([]Issue, error)
+}
+
+func NewClient(apiEndpont, username, password, boardID string) Client {
+	return &client{
+		APIEndpoint: apiEndpont,
+		Username:    username,
+		Password:    password,
+		BoardID:     boardID,
+	}
+}
+
+type client struct {
 	APIEndpoint string
 	Username    string
 	Password    string
 	BoardID     string
 }
 
-func (c *Client) Sprints() ([]Sprint, error) {
+func (c *client) Sprints() ([]Sprint, error) {
 	var ss []Sprint
 	maxResults := 0
 	isLast := false
@@ -61,7 +75,7 @@ func (c *Client) Sprints() ([]Sprint, error) {
 	return ss, nil
 }
 
-func (c *Client) Issues(sprint string) ([]Issue, error) {
+func (c *client) Issues(sprint string) ([]Issue, error) {
 	var issues []Issue
 	total := math.MaxInt32
 	maxResults := 0

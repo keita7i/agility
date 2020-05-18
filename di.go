@@ -40,14 +40,9 @@ func (di DI) JIRAService() application.JIRAService {
 	}
 }
 
-func (di DI) JIRAClient() *jira.Client {
+func (di DI) JIRAClient() jira.Client {
 	conf := di.Config()
-	return &jira.Client{
-		APIEndpoint: conf.JIRAAPIEndpoint,
-		Username:    conf.JIRAUsername,
-		Password:    conf.JIRAPassword,
-		BoardID:     conf.JIRABoardID,
-	}
+	return jira.NewClient(conf.JIRAAPIEndpoint, conf.JIRAUsername, conf.JIRAPassword, conf.JIRABoardID)
 }
 
 func (DI) Config() config.Config {
