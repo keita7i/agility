@@ -2,10 +2,11 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v7"
 	"github.com/keitam913/agility/application"
 	"github.com/keitam913/agility/config"
 	"github.com/keitam913/agility/jira"
-	"github.com/keitam913/agility/redis"
+	agredis "github.com/keitam913/agility/redis"
 	"github.com/keitam913/agility/rest"
 )
 
@@ -43,9 +44,19 @@ func (di DI) JIRAService() application.JIRAService {
 
 func (di DI) JIRAClient() jira.Client {
 	conf := di.Config()
-	return &redis.CachedJIRAClient{
-		JIRAClient: jira.NewClient(conf.JIRAAPIEndpoint, conf.JIRAUsername, conf.JIRAPassword, conf.JIRABoardID),
+	return &agredis.CachedJIRAClient{
+		JIRAClient:  jira.NewClient(conf.JIRAAPIEndpoint, conf.JIRAUsername, conf.JIRAPassword, conf.JIRABoardID),
+		RedisClient: di.RedisClient(),
 	}
+}
+
+func (di DI) RedisClient() *redis.Client {
+	conf := di.Config()
+	return redis.NewClient(&redis.Options{
+		Addr:     conf.RedisAddr,
+		Password: conf.RedisPassword,
+		DB:       conf.RedisDB,
+	})
 }
 
 func (DI) Config() config.Config {
