@@ -56,7 +56,7 @@ func (di DI) JIRAClient() jira.Client {
 
 func (di DI) RedisClient() agredis.Client {
 	conf := di.Config()
-	addrs := strings.Split(conf.RedisAddr, ",")
+	addrs := strings.Split(conf.RedisAddrs, ",")
 	if len(addrs) > 1 {
 		return redis.NewClusterClient(&redis.ClusterOptions{
 			Addrs:        addrs,
@@ -71,7 +71,7 @@ func (di DI) RedisClient() agredis.Client {
 		})
 	}
 	return redis.NewClient(&redis.Options{
-		Addr:     conf.RedisAddr,
+		Addr:     addrs[0],
 		Password: conf.RedisPassword,
 	})
 }
