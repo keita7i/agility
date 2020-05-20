@@ -1,11 +1,13 @@
 package jira
 
 import (
+	"context"
 	"regexp"
 	"sort"
 	"strconv"
 
 	"github.com/keitam913/agility/agile"
+	"golang.org/x/sync/errgroup"
 )
 
 var SprintNameRegex = regexp.MustCompile(`^[Ss](\d+)$`)
@@ -22,7 +24,6 @@ func (s *Service) LastSprints(max int) ([]agile.Sprint, error) {
 	sort.Slice(rss, func(i, j int) bool {
 		return s.CompareSprint(rss[i], rss[j]) > 0
 	})
-
 	from := len(rss)
 	for i, rs := range rss {
 		if rs.State == SprintClosed {
@@ -37,15 +38,31 @@ func (s *Service) LastSprints(max int) ([]agile.Sprint, error) {
 	if to > len(rss) {
 		to = len(rss)
 	}
-
-	var sps []agile.Sprint
+	spCh := make(chan agile.Sprint, max)
+	eg, _ := errgroup.WithContext(context.TODO())
 	for _, rs := range rss[from:to] {
-		sp, err := s.sprint(rs.Name, rs.State == SprintClosed)
-		if err != nil {
-			return nil, err
-		}
+		rst := rs
+		eg.Go(func() error {
+			sp, err := s.sprint(rst.Name, rst.State == SprintClosed)
+			if err != nil {
+				return err
+			}
+			spCh <- sp
+			return nil
+		})
+	}
+	err = eg.Wait()
+	close(spCh)
+	if err != nil {
+		return nil, err
+	}
+	var sps []agile.Sprint
+	for sp := range spCh {
 		sps = append(sps, sp)
 	}
+	sort.Slice(sps, func(i, j int) bool {
+		return sps[j].Less(sps[i])
+	})
 	return sps, nil
 }
 

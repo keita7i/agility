@@ -2,8 +2,12 @@ package agile
 
 import (
 	"math"
+	"regexp"
+	"strconv"
 	"time"
 )
+
+var SprintNameRegex = regexp.MustCompile(`^[Ss](\d+)$`)
 
 type Sprint struct {
 	sprint    string
@@ -106,4 +110,17 @@ func (s Sprint) Velocity(team string, lastSprints []Sprint) int {
 		sum += lastSprints[i].Done(team)
 	}
 	return int(math.Round(float64(sum) / 3))
+}
+
+func (s Sprint) SprintNumber() int {
+	m := SprintNameRegex.FindStringSubmatch(s.Sprint())
+	if len(m) != 2 {
+		return -1
+	}
+	n, _ := strconv.Atoi(m[1])
+	return n
+}
+
+func (s Sprint) Less(other Sprint) bool {
+	return s.SprintNumber() < other.SprintNumber()
 }
