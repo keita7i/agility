@@ -119,14 +119,24 @@ function App() {
         return (
                 <div className="app">
                         <style jsx>{`
+                                .tables-wrapper {
+                                        position: relative;
+                                        width: 100%;
+                                        padding: 2rem;
+                                        background: ${sprints.length <= 0 ? "gray" : "none"};
+                                        opacity: ${sprints.length <= 0 ? "0.5" : "1"};
+                                }
+
                                 .tables {
-                                        margin: 1rem auto;
+                                        position: relative;
+                                        margin: 0 auto;
                                         width: 800pt;
+                                        z-index: -99;
                                 }
 
                                 h1 {
                                         background: #066;
-                                        margin: 0 0 2rem;
+                                        margin: 0;
                                         padding: 1rem;
                                         color: #fff;
                                         font-size: large;
@@ -134,9 +144,11 @@ function App() {
                                 }
                         `}</style>
                         <h1>Agility</h1>
-                        <div className="tables">
-                                {metricTable('All')}
-                                {teams.map((t, key) => metricTable(t, key))}
+                        <div className="tables-wrapper">
+                                <div className="tables">
+                                        {metricTable('All')}
+                                        {teams.map((t, key) => metricTable(t, key))}
+                                </div>
                         </div>
                 </div>
         );
