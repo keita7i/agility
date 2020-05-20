@@ -61,6 +61,9 @@ func (s Sprint) AllCommitment() int {
 }
 
 func (s Sprint) AllDone() int {
+	if !s.done {
+		return -1
+	}
 	c := 0
 	for _, i := range s.issues {
 		if i.DoneSprint() == s.Sprint() {
@@ -92,6 +95,9 @@ func (s Sprint) Commitment(team string) int {
 }
 
 func (s Sprint) Done(team string) int {
+	if !s.done {
+		return -1
+	}
 	c := 0
 	for _, i := range s.issues {
 		if i.HasCommittedBy(team) && i.DoneSprint() == s.Sprint() {
