@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+const RELOADING_INTERVAL_MILLIS = 5000;
+
 function App() {
         let [teams, setTeams] = useState([]);
         let [sprints, setSprints] = useState([]);
@@ -21,6 +23,15 @@ function App() {
                 });
         }
 
+        function reloadSprints() {
+                setTimeout(() => {
+                        loadSprints(ss => {
+                                setSprints(ss);
+                        });
+                        reloadSprints();
+                }, RELOADING_INTERVAL_MILLIS);
+        }
+
         useEffect(() => {
                 loadTeams(ts => {
                         setTeams(ts);
@@ -28,6 +39,7 @@ function App() {
                 loadSprints(ss => {
                         setSprints(ss);
                 });
+                reloadSprints();
         }, []);
 
         function metricTable(team, key) {
