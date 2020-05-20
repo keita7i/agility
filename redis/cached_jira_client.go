@@ -21,7 +21,7 @@ var (
 
 type CachedJIRAClient struct {
 	JIRAClient  jira.Client
-	RedisClient *redis.Client
+	RedisClient Client
 }
 
 func (c *CachedJIRAClient) Sprints() ([]jira.Sprint, error) {

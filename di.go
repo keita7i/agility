@@ -1,6 +1,10 @@
 package main
 
 import (
+	"runtime"
+	"strings"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v7"
 	"github.com/keitam913/agility/application"
@@ -50,12 +54,25 @@ func (di DI) JIRAClient() jira.Client {
 	}
 }
 
-func (di DI) RedisClient() *redis.Client {
+func (di DI) RedisClient() agredis.Client {
 	conf := di.Config()
+	addrs := strings.Split(conf.RedisAddr, ",")
+	if len(addrs) > 1 {
+		return redis.NewClusterClient(&redis.ClusterOptions{
+			Addrs:        addrs,
+			Password:     conf.RedisPassword,
+			MaxRedirects: 1,
+			MaxRetries:   0,
+			DialTimeout:  1000 * time.Millisecond,
+			ReadTimeout:  1000 * time.Millisecond,
+			PoolSize:     16 * runtime.NumCPU(),
+			MinIdleConns: 0,
+			PoolTimeout:  100 * time.Millisecond,
+		})
+	}
 	return redis.NewClient(&redis.Options{
 		Addr:     conf.RedisAddr,
 		Password: conf.RedisPassword,
-		DB:       conf.RedisDB,
 	})
 }
 
