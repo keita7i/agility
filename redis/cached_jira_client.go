@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 
 	"github.com/go-redis/redis/v7"
-	"github.com/keitam913/agility/jira"
+	"github.com/keita7i/agility/jira"
 )
 
 const (

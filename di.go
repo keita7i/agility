@@ -7,11 +7,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v7"
-	"github.com/keitam913/agility/application"
-	"github.com/keitam913/agility/config"
-	"github.com/keitam913/agility/jira"
-	agredis "github.com/keitam913/agility/redis"
-	"github.com/keitam913/agility/rest"
+	"github.com/keita7i/agility/application"
+	"github.com/keita7i/agility/config"
+	"github.com/keita7i/agility/jira"
+	agredis "github.com/keita7i/agility/redis"
+	"github.com/keita7i/agility/rest"
 )
 
 type DI struct {
