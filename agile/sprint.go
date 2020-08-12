@@ -75,7 +75,7 @@ func (s Sprint) AllDone() int {
 	}
 	c := 0
 	for _, i := range s.issues {
-		if i.DoneSprint() == s.Sprint() {
+		if i.DoneSprint() == s.sprint {
 			c += i.Size()
 		}
 	}
@@ -109,7 +109,7 @@ func (s Sprint) Done(team string) int {
 	}
 	c := 0
 	for _, i := range s.issues {
-		if i.HasCommittedBy(team) && i.DoneSprint() == s.Sprint() {
+		if i.HasCommittedBy(team) && i.DoneSprint() == s.sprint {
 			c += i.Size()
 		}
 	}
@@ -128,7 +128,7 @@ func (s Sprint) Velocity(team string, lastSprints []Sprint) int {
 }
 
 func (s Sprint) SprintNumber() int {
-	m := SprintNameRegex.FindStringSubmatch(s.Sprint())
+	m := SprintNameRegex.FindStringSubmatch(s.sprint)
 	if len(m) != 2 {
 		return -1
 	}
