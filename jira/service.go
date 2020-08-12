@@ -2,15 +2,12 @@ package jira
 
 import (
 	"context"
-	"regexp"
 	"sort"
 	"strconv"
 
 	"github.com/keita7i/agility/agile"
 	"golang.org/x/sync/errgroup"
 )
-
-var SprintNameRegex = regexp.MustCompile(`^[Ss](\d+)$`)
 
 type Service struct {
 	Client Client
@@ -47,7 +44,9 @@ func (s *Service) LastSprints(max int) ([]agile.Sprint, error) {
 			if err != nil {
 				return err
 			}
-			spCh <- sp
+			if !sp.IsStale() {
+				spCh <- sp
+			}
 			return nil
 		})
 	}
@@ -63,6 +62,7 @@ func (s *Service) LastSprints(max int) ([]agile.Sprint, error) {
 	sort.Slice(sps, func(i, j int) bool {
 		return sps[j].Less(sps[i])
 	})
+
 	return sps, nil
 }
 
@@ -90,17 +90,17 @@ func (s *Service) sprint(sprint string, done bool) (agile.Sprint, error) {
 }
 
 func (s *Service) CompareSprint(l, r Sprint) int {
-	if !SprintNameRegex.MatchString(l.Name) {
+	if !agile.SprintNameRegex.MatchString(l.Name) {
 		return -1
 	}
-	if !SprintNameRegex.MatchString(r.Name) {
+	if !agile.SprintNameRegex.MatchString(r.Name) {
 		return 1
 	}
-	ls, err := strconv.Atoi(SprintNameRegex.FindStringSubmatch(l.Name)[1])
+	ls, err := strconv.Atoi(agile.SprintNameRegex.FindStringSubmatch(l.Name)[1])
 	if err != nil {
 		panic(err)
 	}
-	rs, err := strconv.Atoi(SprintNameRegex.FindStringSubmatch(r.Name)[1])
+	rs, err := strconv.Atoi(agile.SprintNameRegex.FindStringSubmatch(r.Name)[1])
 	if err != nil {
 		panic(err)
 	}

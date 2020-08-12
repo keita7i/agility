@@ -1,13 +1,14 @@
 package agile
 
 import (
+	"fmt"
 	"math"
 	"regexp"
 	"strconv"
 	"time"
 )
 
-var SprintNameRegex = regexp.MustCompile(`^[Ss](\d+)$`)
+var SprintNameRegex = regexp.MustCompile(`^[Pp](\d+).*$`)
 
 type Sprint struct {
 	sprint    string
@@ -25,7 +26,15 @@ func NewSprint(sprint string) Sprint {
 }
 
 func (s Sprint) Sprint() string {
-	return s.sprint
+	if s.IsStale() {
+		return ""
+	}
+	n := SprintNameRegex.FindStringSubmatch(s.sprint)[1]
+	return fmt.Sprintf("p%s", n)
+}
+
+func (s Sprint) IsStale() bool {
+	return !SprintNameRegex.MatchString(s.sprint)
 }
 
 func (s *Sprint) Start(at time.Time) {

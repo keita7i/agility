@@ -72,6 +72,7 @@ func (c *client) Sprints() ([]Sprint, error) {
 		maxResults = int(sr.MaxResults)
 		isLast = sr.IsLast
 	}
+
 	return ss, nil
 }
 
