@@ -1,4 +1,4 @@
-module github.com/keita7i/agility
+module github.com/keitam0/agility
 
 go 1.14
 

@@ -1,7 +1,7 @@
 package application
 
 import (
-	"github.com/keita7i/agility/agile"
+	"github.com/keitam0/agility/agile"
 )
 
 type Service struct {

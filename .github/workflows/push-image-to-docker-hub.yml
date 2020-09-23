@@ -13,5 +13,5 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERANME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: keita7i/agility
+        repository: keitam0/agility
         tags: latest

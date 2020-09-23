@@ -3,7 +3,7 @@ package rest
 import (
 	"net/http"
 
-	"github.com/keita7i/agility/application"
+	"github.com/keitam0/agility/application"
 
 	"github.com/gin-gonic/gin"
 )
