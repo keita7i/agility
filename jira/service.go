@@ -139,7 +139,7 @@ func (s *Service) sprint(sprint string, done bool) (agile.Sprint, error) {
 	}
 	for _, i := range is {
 		closedSprint := ""
-		if i.Fields.Status.Name == "完了" && len(i.Fields.ClosedSprints) > 0 {
+		if isDoneStatus(i.Fields.Status.Name) && len(i.Fields.ClosedSprints) > 0 {
 			lastClosedSprint := i.Fields.ClosedSprints[0]
 			for j := 1; j < len(i.Fields.ClosedSprints); j++ {
 				if s.CompareSprint(lastClosedSprint, i.Fields.ClosedSprints[j]) < 0 {
@@ -161,15 +161,20 @@ func (s *Service) sprintB(boardID, sprint string, done bool) (agile.Sprint1, err
 		return agile.Sprint1{}, err
 	}
 	for _, i := range is {
+		var assignedSprints []Sprint
+		if i.Fields.Sprint.Name != "" {
+			assignedSprints = append(assignedSprints, i.Fields.Sprint)
+		}
+		assignedSprints = append(assignedSprints, i.Fields.ClosedSprints...)
 		closedSprint := ""
-		if i.Fields.Status.Name == "完了" && len(i.Fields.ClosedSprints) > 0 {
-			lastClosedSprint := i.Fields.ClosedSprints[0]
+		if isDoneStatus(i.Fields.Status.Name) && len(assignedSprints) > 0 {
+			latestSprint := assignedSprints[0]
 			for j := 1; j < len(i.Fields.ClosedSprints); j++ {
-				if s.CompareSprint(lastClosedSprint, i.Fields.ClosedSprints[j]) < 0 {
-					lastClosedSprint = i.Fields.ClosedSprints[j]
+				if s.CompareSprint(latestSprint, assignedSprints[j]) < 0 {
+					latestSprint = assignedSprints[j]
 				}
 			}
-			closedSprint = lastClosedSprint.Name
+			closedSprint = latestSprint.Name
 		}
 		sp.AddIssue(agile.NewIssue(int(i.Fields.Size), i.Fields.Labels, closedSprint))
 	}
@@ -192,4 +197,13 @@ func (s *Service) CompareSprint(l, r Sprint) int {
 		panic(err)
 	}
 	return ls - rs
+}
+
+func isDoneStatus(statusName string) bool {
+	switch statusName {
+	case "完了", "クローズ", "解決済み":
+		return true
+	default:
+		return false
+	}
 }

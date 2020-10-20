@@ -16,9 +16,11 @@ type Issue struct {
 }
 
 type Fields struct {
+	Summary       string   `json:"summary"`
 	Status        Status   `json:"status"`
 	Labels        []string `json:"labels"`
 	Size          float32  `json:"customfield_10002"`
+	Sprint        Sprint   `json:"sprint"`
 	ClosedSprints []Sprint `json:"closedSprints"`
 }
 
