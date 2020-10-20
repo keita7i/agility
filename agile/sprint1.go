@@ -24,7 +24,7 @@ func (s Sprint1) Done() bool {
 	return s.done
 }
 
-func (s Sprint1) SetDone(done bool) {
+func (s *Sprint1) SetDone(done bool) {
 	s.done = done
 }
 
