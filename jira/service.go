@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+	"fmt"
 	"sort"
 	"strconv"
 
@@ -68,7 +69,11 @@ func (s *Service) LastSprints(max int) ([]agile.Sprint, error) {
 }
 
 func (s *Service) BoardOfTeam(team string, maxSprints int) (agile.Board, error) {
-	rss, err := s.Client.SprintsB(s.TeamBoardIDs[team])
+	bID, ok := s.TeamBoardIDs[team]
+	if !ok {
+		return agile.Board{}, fmt.Errorf("invalid team: %s", team)
+	}
+	rss, err := s.Client.SprintsB(bID)
 	if err != nil {
 		return agile.Board{}, err
 	}
@@ -94,7 +99,7 @@ func (s *Service) BoardOfTeam(team string, maxSprints int) (agile.Board, error) 
 	for _, rs := range rss[from:to] {
 		rst := rs
 		eg.Go(func() error {
-			sp, err := s.sprintT(s.TeamBoardIDs[team], rst.Name, rst.State == SprintClosed)
+			sp, err := s.sprintB(s.TeamBoardIDs[team], rst.Name, rst.State == SprintClosed)
 			if err != nil {
 				return err
 			}
@@ -148,10 +153,10 @@ func (s *Service) sprint(sprint string, done bool) (agile.Sprint, error) {
 	return sp, nil
 }
 
-func (s *Service) sprintT(team, sprint string, done bool) (agile.Sprint1, error) {
+func (s *Service) sprintB(boardID, sprint string, done bool) (agile.Sprint1, error) {
 	sp := agile.NewSprint1(sprint)
 	sp.SetDone(done)
-	is, err := s.Client.Issues(sprint, done)
+	is, err := s.Client.IssuesB(boardID, sprint, done)
 	if err != nil {
 		return agile.Sprint1{}, err
 	}

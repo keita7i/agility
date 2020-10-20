@@ -82,7 +82,7 @@ func (c *CachedJIRAClient) Issues(sprint string, sprintDone bool) ([]jira.Issue,
 
 func (c *CachedJIRAClient) SprintsB(boardID string) ([]jira.Sprint, error) {
 	var sprints []jira.Sprint
-	b, err := c.RedisClient.Get(SprintKey).Bytes()
+	b, err := c.RedisClient.Get(fmt.Sprintf(SprintKey, boardID)).Bytes()
 	if err == redis.Nil {
 		ss, err := c.JIRAClient.SprintsB(boardID)
 		if err != nil {
@@ -108,7 +108,7 @@ func (c *CachedJIRAClient) SprintsB(boardID string) ([]jira.Sprint, error) {
 
 func (c *CachedJIRAClient) IssuesB(boardID string, sprint string, sprintDone bool) ([]jira.Issue, error) {
 	var issues []jira.Issue
-	b, err := c.RedisClient.Get(fmt.Sprintf(IssueKey, sprint)).Bytes()
+	b, err := c.RedisClient.Get(fmt.Sprintf(IssueBKey, boardID, sprint)).Bytes()
 	if err == redis.Nil {
 		is, err := c.JIRAClient.IssuesB(boardID, sprint, sprintDone)
 		if err != nil {

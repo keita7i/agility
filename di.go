@@ -18,7 +18,7 @@ type DI struct {
 }
 
 func (di DI) Router() *gin.Engine {
-	return rest.NewRouter(di.SprintHandler(), di.TeamHandler())
+	return rest.NewRouter(di.SprintHandler(), di.TeamHandler(), di.BoardHandler())
 }
 
 func (di DI) SprintHandler() *rest.SprintHandler {
@@ -34,6 +34,12 @@ func (di DI) TeamHandler() *rest.TeamHandler {
 	}
 }
 
+func (di DI) BoardHandler() *rest.BoardHandler {
+	return &rest.BoardHandler{
+		ApplicationService: di.ApplicationService(),
+	}
+}
+
 func (di DI) ApplicationService() *application.Service {
 	return &application.Service{
 		JIRAService: di.JIRAService(),
@@ -42,7 +48,8 @@ func (di DI) ApplicationService() *application.Service {
 
 func (di DI) JIRAService() application.JIRAService {
 	return &jira.Service{
-		Client: di.JIRAClient(),
+		Client:       di.JIRAClient(),
+		TeamBoardIDs: di.Config().TeamBoardIDs,
 	}
 }
 
