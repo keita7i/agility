@@ -22,15 +22,25 @@ func (di DI) Router() *gin.Engine {
 }
 
 func (di DI) SprintHandler() *rest.SprintHandler {
+	ids := di.Config().TeamBoardIDs
+	teams := make([]string, len(ids))
+	for t, _ := range ids {
+		teams = append(teams, t)
+	}
 	return &rest.SprintHandler{
 		ApplicationService: di.ApplicationService(),
-		Teams:              di.Config().Teams,
+		Teams:              teams,
 	}
 }
 
 func (di DI) TeamHandler() *rest.TeamHandler {
+	ids := di.Config().TeamBoardIDs
+	teams := make([]string, 0)
+	for t, _ := range ids {
+		teams = append(teams, t)
+	}
 	return &rest.TeamHandler{
-		Teams: di.Config().Teams,
+		Teams: teams,
 	}
 }
 
