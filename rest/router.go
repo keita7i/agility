@@ -4,11 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter(sh *SprintHandler, th *TeamHandler) *gin.Engine {
+func NewRouter(sh *SprintHandler, th *TeamHandler, bh *BoardHandler) *gin.Engine {
 	r := gin.Default()
 
 	r.GET("/v1/sprints", sh.GET)
 	r.GET("/v1/teams", th.GET)
+	r.GET("/v1/boards", bh.GET)
 
 	r.StaticFile("/main.js", "/usr/share/agility/assets/main.js")
 	r.StaticFile("/main.css", "/usr/share/agility/assets/main.css")

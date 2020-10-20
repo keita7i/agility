@@ -10,3 +10,15 @@ type TeamMetrics struct {
 	Done       int `json:"done"`
 	Velocity   int `json:"velocity"`
 }
+
+type BoardResponse struct {
+	Team    string   `json:"team"`
+	Sprints []Sprint `json:"sprints"`
+}
+
+type Sprint struct {
+	Name                      string `json:"name"`
+	Commitment                int    `json:"commitment"`
+	Velocity                  int    `json:"velocity"`
+	AverageOfLatestVelocities int    `json:"averageOfLatestVelocities"`
+}
