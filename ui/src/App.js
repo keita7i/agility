@@ -14,32 +14,19 @@ function App() {
                 })
         }
 
-        function loadSprints(f) {
-                fetch('/v1/sprints').then((res) => {
+        function loadBoards(f) {
+                fetch('/v1/boards/').then((res) => {
                         res.json().then((ss) => {
-                                ss.reverse();
+                                ss.sprints.reverse();
                                 f(ss);
                         });
                 });
-        }
-
-        function reloadSprints() {
-                setTimeout(() => {
-                        loadSprints(ss => {
-                                setSprints(ss);
-                        });
-                        reloadSprints();
-                }, RELOADING_INTERVAL_MILLIS);
         }
 
         useEffect(() => {
                 loadTeams(ts => {
                         setTeams(ts);
                 });
-                loadSprints(ss => {
-                        setSprints(ss);
-                });
-                reloadSprints();
         }, []);
 
         function metricTable(team, key) {
@@ -65,9 +52,8 @@ function App() {
                                                 {headerRow()}
                                         </thead>
                                         <tbody>
-                                                {metricRow(team, 'Commitment')}
-                                                {metricRow(team, 'Done')}
-                                                {metricRow(team, 'Velocity')}
+                                                {/* {metricRow(team, 'Commitment')}
+                                                {metricRow(team, 'Velocity')} */}
                                         </tbody>
                                 </table>
                         </div>
@@ -95,38 +81,38 @@ function App() {
                                 }
                         `}</style>
                         <th className="metric-category">Sprint</th>
-                        {sprints.map((s, i) => {
-                                return <th className="sprint" key={i}>{s.sprint}</th>;
+                        {boards['dev1'].sprints.map((s, i) => {
+                                return <th className="sprint" key={i}>{s.name}</th>;
                         })}
                 </tr>);
         }
 
-        function metricRow(team, category) {
-                return (<tr>
-                        <style jsx>{`
-                                th {
-                                        border-width: 0 1pt 1pt 0;
-                                        border-color: #ccc;
-                                        border-style: solid;
-                                        padding: 0.5ex;
-                                        text-align: left;
-                                }
+        // function metricRow(team, category) {
+        //         return (<tr>
+        //                 <style jsx>{`
+        //                         th {
+        //                                 border-width: 0 1pt 1pt 0;
+        //                                 border-color: #ccc;
+        //                                 border-style: solid;
+        //                                 padding: 0.5ex;
+        //                                 text-align: left;
+        //                         }
 
-                                td {
-                                        border-width: 0 1pt 1pt 0;
-                                        border-color: #ccc;
-                                        border-style: solid;
-                                        padding: 0.5ex;
-                                        text-align: right;
-                                }
-                        `}</style>
-                        <th>{category}</th>
-                        {sprints.map((s, i) => {
-                                let metric = s.teams[team][category.toLowerCase()];
-                                return <td key={i}>{metric >= 0 ? metric : null}</td>;
-                        })}
-                </tr>);
-        }
+        //                         td {
+        //                                 border-width: 0 1pt 1pt 0;
+        //                                 border-color: #ccc;
+        //                                 border-style: solid;
+        //                                 padding: 0.5ex;
+        //                                 text-align: right;
+        //                         }
+        //                 `}</style>
+        //                 <th>{category}</th>
+        //                 {sprints.map((s, i) => {
+        //                         let metric = s.teams[team][category.toLowerCase()];
+        //                         return <td key={i}>{metric >= 0 ? metric : null}</td>;
+        //                 })}
+        //         </tr>);
+        // }
 
         return (
                 <div className="app">
@@ -158,8 +144,7 @@ function App() {
                         <h1>Agility</h1>
                         <div className="tables-wrapper">
                                 <div className="tables">
-                                        {metricTable('All')}
-                                        {teams.map((t, key) => metricTable(t, key))}
+                                        {metricTable('dev1')}
                                 </div>
                         </div>
                 </div>
