@@ -25,7 +25,8 @@ func (bh *BoardHandler) GET(ctx *gin.Context) {
 		})
 	}
 	ctx.JSON(http.StatusOK, BoardResponse{
-		Team:    b.Team(),
-		Sprints: ss,
+		Team:                      b.Team(),
+		Sprints:                   ss,
+		AverageOfLatestVelocities: b.AverageOfVelocityOfLastThreeSprints(),
 	})
 }

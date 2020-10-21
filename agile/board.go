@@ -1,5 +1,9 @@
 package agile
 
+import (
+	"math"
+)
+
 type Board struct {
 	team    string
 	sprints []Sprint1
@@ -25,13 +29,14 @@ func (b *Board) AddSprint(sprint Sprint1) {
 }
 
 func (b *Board) AverageOfVelocityOfLastThreeSprints() int {
-	from := len(b.sprints) - 3
-	if from < 0 {
-		from = 0
+	sum := 0
+	cnt := 0
+	for i := 0; i < len(b.Sprints()) && cnt < 3; i++ {
+		if !b.Sprints()[i].Done() {
+			continue
+		}
+		sum += b.Sprints()[i].Velocity()
+		cnt++
 	}
-	total := 0
-	for i := from; i < len(b.sprints); i++ {
-		total += b.sprints[i].Velocity()
-	}
-	return total / (len(b.sprints) - from)
+	return int(math.Round(float64(sum) / float64(cnt)))
 }
