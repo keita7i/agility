@@ -9,7 +9,7 @@ func NewRouter(sh *SprintHandler, th *TeamHandler, bh *BoardHandler) *gin.Engine
 
 	r.GET("/v1/sprints", sh.GET)
 	r.GET("/v1/teams", th.GET)
-	r.GET("/v1/boards/:team", bh.GET)
+	r.GET("/v1/boards", bh.GET)
 
 	r.StaticFile("/main.js", "/usr/share/agility/assets/main.js")
 	r.StaticFile("/main.css", "/usr/share/agility/assets/main.css")

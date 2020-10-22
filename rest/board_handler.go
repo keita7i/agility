@@ -12,21 +12,25 @@ type BoardHandler struct {
 }
 
 func (bh *BoardHandler) GET(ctx *gin.Context) {
-	b, err := bh.ApplicationService.BoardOfTeam(ctx.Param("team"))
+	bs, err := bh.ApplicationService.AllBoards()
 	if err != nil {
 		panic(err)
 	}
-	ss := make([]Sprint, 0)
-	for _, s := range b.Sprints() {
-		ss = append(ss, Sprint{
-			Name:       s.Name(),
-			Commitment: s.Commitment(),
-			Velocity:   s.Velocity(),
+	brs := make([]BoardResponse, 0)
+	for _, b := range bs {
+		ss := make([]Sprint, 0)
+		for _, s := range b.Sprints() {
+			ss = append(ss, Sprint{
+				Name:       s.Name(),
+				Commitment: s.Commitment(),
+				Velocity:   s.Velocity(),
+			})
+		}
+		brs = append(brs, BoardResponse{
+			Team:                      b.Team(),
+			Sprints:                   ss,
+			AverageOfLatestVelocities: b.AverageOfVelocityOfLastThreeSprints(),
 		})
 	}
-	ctx.JSON(http.StatusOK, BoardResponse{
-		Team:                      b.Team(),
-		Sprints:                   ss,
-		AverageOfLatestVelocities: b.AverageOfVelocityOfLastThreeSprints(),
-	})
+	ctx.JSON(http.StatusOK, brs)
 }

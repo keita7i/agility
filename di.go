@@ -23,7 +23,7 @@ func (di DI) Router() *gin.Engine {
 
 func (di DI) SprintHandler() *rest.SprintHandler {
 	ids := di.Config().TeamBoardIDs
-	teams := make([]string, len(ids))
+	var teams []string
 	for t, _ := range ids {
 		teams = append(teams, t)
 	}
@@ -51,8 +51,14 @@ func (di DI) BoardHandler() *rest.BoardHandler {
 }
 
 func (di DI) ApplicationService() *application.Service {
+	ids := di.Config().TeamBoardIDs
+	var teams []string
+	for t, _ := range ids {
+		teams = append(teams, t)
+	}
 	return &application.Service{
 		JIRAService: di.JIRAService(),
+		Teams:       teams,
 	}
 }
 
