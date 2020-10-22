@@ -5,18 +5,24 @@ const RELOADING_INTERVAL_MILLIS = 5000;
 function App() {
         const [boards, setBoards] = useState([]);
 
-        function loadBoards(f) {
+        function loadBoards() {
                 fetch('/v1/boards').then((res) => {
-                        res.json().then((ss) => {
-                                f(ss);
+                        res.json().then(bs => {
+                                setBoards(bs);
                         });
                 });
         }
 
+        function reloadBoards() {
+                setTimeout(() => {
+                        loadBoards();
+                        reloadBoards();
+                }, RELOADING_INTERVAL_MILLIS);
+        }
+
         useEffect(() => {
-                loadBoards(boards => {
-                        setBoards(boards);
-                });
+                loadBoards();
+                reloadBoards();
         }, []);
 
         function teamBoard(board, key) {
@@ -137,7 +143,7 @@ function App() {
                         <h1>Agility</h1>
                         <div className="tables-wrapper">
                                 <div className="tables">
-                                        {boards.map(board => teamBoard(board))}
+                                        {boards.map((board, i) => teamBoard(board, i))}
                                 </div>
                         </div>
                 </div>
