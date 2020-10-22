@@ -3,33 +3,80 @@ import React, { useEffect, useState } from 'react';
 const RELOADING_INTERVAL_MILLIS = 5000;
 
 function App() {
-        let [teams, setTeams] = useState([]);
-        let [sprints, setSprints] = useState([]);
-
-        function loadTeams(f) {
-                fetch('/v1/teams').then(res => {
-                        res.json().then(ts => {
-                                f(ts);
-                        });
-                })
-        }
+        const [boards, setBoards] = useState([]);
 
         function loadBoards(f) {
-                fetch('/v1/boards/').then((res) => {
+                fetch('/v1/boards').then((res) => {
                         res.json().then((ss) => {
-                                ss.sprints.reverse();
                                 f(ss);
                         });
                 });
         }
 
         useEffect(() => {
-                loadTeams(ts => {
-                        setTeams(ts);
+                loadBoards(boards => {
+                        setBoards(boards);
                 });
         }, []);
 
-        function metricTable(team, key) {
+        function teamBoard(board, key) {
+                const sprints = [...board.sprints];
+                sprints.reverse();
+
+                function headerRow() {
+                        return (<tr>
+                                <style jsx>{`
+                                        th {
+                                                border-width: 0 1pt 1pt 0;
+                                                border-color: #ccc;
+                                                border-style: solid;
+                                                padding: 0.5ex;
+                                                text-align: left;
+                                        }
+
+                                        .metric-category {
+                                                width: 8em;
+                                        }
+
+                                        .sprint {
+                                                width: 5em;
+
+                                        }
+                                `}</style>
+                                <th className="metric-category">Sprint</th>
+                                {sprints.map((s, i) => {
+                                        return <th className="sprint" key={i}>{s.name}</th>;
+                                })}
+                        </tr>);
+                }
+
+                function metricRow(category) {
+                        return (<tr>
+                                <style jsx>{`
+                                        th {
+                                                border-width: 0 1pt 1pt 0;
+                                                border-color: #ccc;
+                                                border-style: solid;
+                                                padding: 0.5ex;
+                                                text-align: left;
+                                        }
+
+                                        td {
+                                                border-width: 0 1pt 1pt 0;
+                                                border-color: #ccc;
+                                                border-style: solid;
+                                                padding: 0.5ex;
+                                                text-align: right;
+                                        }
+                                `}</style>
+                                <th>{category}</th>
+                                {sprints.map((s, i) => {
+                                        let metric = s[category.toLowerCase()];
+                                        return <td key={i}>{metric >= 0 ? metric : null}</td>;
+                                })}
+                        </tr>);
+                }
+
                 return (
                         <div key={key}>
                                 <style jsx>{`
@@ -46,73 +93,19 @@ function App() {
                                                 margin-bottom: 6ex;
                                         }
                                 `}</style>
-                                <h2>{team}</h2>
+                                <h2>{board.team}</h2>
                                 <table>
                                         <thead>
                                                 {headerRow()}
                                         </thead>
                                         <tbody>
-                                                {/* {metricRow(team, 'Commitment')}
-                                                {metricRow(team, 'Velocity')} */}
+                                                {metricRow('Commitment')}
+                                                {metricRow('Velocity')}
                                         </tbody>
                                 </table>
                         </div>
                 );
         }
-
-        function headerRow() {
-                return (<tr>
-                        <style jsx>{`
-                                th {
-                                        border-width: 0 1pt 1pt 0;
-                                        border-color: #ccc;
-                                        border-style: solid;
-                                        padding: 0.5ex;
-                                        text-align: left;
-                                }
-
-                                .metric-category {
-                                        width: 8em;
-                                }
-
-                                .sprint {
-                                        width: 5em;
-
-                                }
-                        `}</style>
-                        <th className="metric-category">Sprint</th>
-                        {boards['dev1'].sprints.map((s, i) => {
-                                return <th className="sprint" key={i}>{s.name}</th>;
-                        })}
-                </tr>);
-        }
-
-        // function metricRow(team, category) {
-        //         return (<tr>
-        //                 <style jsx>{`
-        //                         th {
-        //                                 border-width: 0 1pt 1pt 0;
-        //                                 border-color: #ccc;
-        //                                 border-style: solid;
-        //                                 padding: 0.5ex;
-        //                                 text-align: left;
-        //                         }
-
-        //                         td {
-        //                                 border-width: 0 1pt 1pt 0;
-        //                                 border-color: #ccc;
-        //                                 border-style: solid;
-        //                                 padding: 0.5ex;
-        //                                 text-align: right;
-        //                         }
-        //                 `}</style>
-        //                 <th>{category}</th>
-        //                 {sprints.map((s, i) => {
-        //                         let metric = s.teams[team][category.toLowerCase()];
-        //                         return <td key={i}>{metric >= 0 ? metric : null}</td>;
-        //                 })}
-        //         </tr>);
-        // }
 
         return (
                 <div className="app">
@@ -121,8 +114,8 @@ function App() {
                                         position: relative;
                                         width: 100%;
                                         padding: 2rem;
-                                        background: ${sprints.length <= 0 ? "gray" : "none"};
-                                        opacity: ${sprints.length <= 0 ? "0.5" : "1"};
+                                        background: ${boards.length <= 0 ? "gray" : "none"};
+                                        opacity: ${boards.length <= 0 ? "0.5" : "1"};
                                 }
 
                                 .tables {
@@ -144,7 +137,7 @@ function App() {
                         <h1>Agility</h1>
                         <div className="tables-wrapper">
                                 <div className="tables">
-                                        {metricTable('dev1')}
+                                        {boards.map(board => teamBoard(board))}
                                 </div>
                         </div>
                 </div>
