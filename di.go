@@ -51,10 +51,10 @@ func (di DI) BoardHandler() *rest.BoardHandler {
 }
 
 func (di DI) ApplicationService() *application.Service {
-	ids := di.Config().TeamBoardIDs
+	ids := di.Config().TeamBoardIDs0
 	var teams []string
-	for t, _ := range ids {
-		teams = append(teams, t)
+	for _, tbi := range ids {
+		teams = append(teams, tbi.Team)
 	}
 	return &application.Service{
 		JIRAService: di.JIRAService(),
