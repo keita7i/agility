@@ -18,30 +18,7 @@ type DI struct {
 }
 
 func (di DI) Router() *gin.Engine {
-	return rest.NewRouter(di.SprintHandler(), di.TeamHandler(), di.BoardHandler())
-}
-
-func (di DI) SprintHandler() *rest.SprintHandler {
-	ids := di.Config().TeamBoardIDs
-	var teams []string
-	for t, _ := range ids {
-		teams = append(teams, t)
-	}
-	return &rest.SprintHandler{
-		Board: di.BoardUsecase(),
-		Teams: teams,
-	}
-}
-
-func (di DI) TeamHandler() *rest.TeamHandler {
-	ids := di.Config().TeamBoardIDs
-	teams := make([]string, 0)
-	for t, _ := range ids {
-		teams = append(teams, t)
-	}
-	return &rest.TeamHandler{
-		Teams: teams,
-	}
+	return rest.NewRouter(di.BoardHandler())
 }
 
 func (di DI) BoardHandler() *rest.BoardHandler {

@@ -5,11 +5,9 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func NewRouter(sh *SprintHandler, th *TeamHandler, bh *BoardHandler) *gin.Engine {
+func NewRouter(bh *BoardHandler) *gin.Engine {
 	r := gin.Default()
 
-	r.GET("/v1/sprints", sh.GET)
-	r.GET("/v1/teams", th.GET)
 	r.GET("/v1/boards", bh.GET)
 
 	ph := promhttp.Handler()
