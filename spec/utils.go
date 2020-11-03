@@ -16,7 +16,7 @@ var defaultEnvironment = map[string]string{
 	"JIRA_API_ENDPOINT": "http://test:9999",
 	"JIRA_USER_NAME":    "",
 	"JIRA_PASSWORD":     "",
-	"REDIS_ADDRS":       "localhost:6379",
+	"REDIS_ADDRS":       "redis:6379",
 	"REDIS_PASSWORD":    "",
 	"TEAM_BOARD_IDS":    "test:1000",
 }
