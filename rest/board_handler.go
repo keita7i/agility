@@ -8,11 +8,11 @@ import (
 )
 
 type BoardHandler struct {
-	ApplicationService *usecase.Service
+	Board *usecase.Board
 }
 
 func (bh *BoardHandler) GET(ctx *gin.Context) {
-	bs, err := bh.ApplicationService.AllBoards()
+	bs, err := bh.Board.AllBoards()
 	if err != nil {
 		panic(err)
 	}

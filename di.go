@@ -28,8 +28,8 @@ func (di DI) SprintHandler() *rest.SprintHandler {
 		teams = append(teams, t)
 	}
 	return &rest.SprintHandler{
-		ApplicationService: di.ApplicationService(),
-		Teams:              teams,
+		Board: di.BoardUsecase(),
+		Teams: teams,
 	}
 }
 
@@ -46,17 +46,17 @@ func (di DI) TeamHandler() *rest.TeamHandler {
 
 func (di DI) BoardHandler() *rest.BoardHandler {
 	return &rest.BoardHandler{
-		ApplicationService: di.ApplicationService(),
+		Board: di.BoardUsecase(),
 	}
 }
 
-func (di DI) ApplicationService() *usecase.Service {
+func (di DI) BoardUsecase() *usecase.Board {
 	ids := di.Config().TeamBoardIDs0
 	var teams []string
 	for _, tbi := range ids {
 		teams = append(teams, tbi.Team)
 	}
-	return &usecase.Service{
+	return &usecase.Board{
 		JIRAService: di.JIRAService(),
 		Teams:       teams,
 	}

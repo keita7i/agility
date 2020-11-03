@@ -10,29 +10,29 @@ import (
 
 const MAX_SPRINTS = 8
 
-type Service struct {
+type Board struct {
 	JIRAService JIRAService
 	Teams       []string
 }
 
-func (s Service) LastSprints(max int) ([]agile.Sprint, error) {
-	return s.JIRAService.LastSprints(max)
+func (b Board) LastSprints(max int) ([]agile.Sprint, error) {
+	return b.JIRAService.LastSprints(max)
 }
 
-func (s Service) BoardOfTeam(team string) (agile.Board, error) {
-	return s.JIRAService.BoardOfTeam(team, MAX_SPRINTS)
+func (b Board) BoardOfTeam(team string) (agile.Board, error) {
+	return b.JIRAService.BoardOfTeam(team, MAX_SPRINTS)
 }
 
-func (s Service) AllBoards() ([]agile.Board, error) {
-	errCh := make(chan error, len(s.Teams))
+func (b Board) AllBoards() ([]agile.Board, error) {
+	errCh := make(chan error, len(b.Teams))
 	defer close(errCh)
 	sm := &sync.Map{}
 	wg := &sync.WaitGroup{}
-	for _, t := range s.Teams {
+	for _, t := range b.Teams {
 		wg.Add(1)
 		go func(t string) {
 			defer wg.Done()
-			b, err := s.BoardOfTeam(t)
+			b, err := b.BoardOfTeam(t)
 			if err != nil {
 				errCh <- err
 				return
@@ -49,7 +49,7 @@ func (s Service) AllBoards() ([]agile.Board, error) {
 		return nil, errors.New(strings.Join(errs, ","))
 	}
 	var bs []agile.Board
-	for _, t := range s.Teams {
+	for _, t := range b.Teams {
 		b, ok := sm.Load(t)
 		if !ok {
 			panic("must not happen")

@@ -10,12 +10,12 @@ import (
 const SHOW_SPRINTS = 8
 
 type SprintHandler struct {
-	ApplicationService *usecase.Service
-	Teams              []string
+	Board *usecase.Board
+	Teams []string
 }
 
 func (sh *SprintHandler) GET(ctx *gin.Context) {
-	sps, err := sh.ApplicationService.LastSprints(SHOW_SPRINTS + 2) // Get more sprints to calculate velocities
+	sps, err := sh.Board.LastSprints(SHOW_SPRINTS + 2) // Get more sprints to calculate velocities
 	if err != nil {
 		panic(err)
 	}
