@@ -15,10 +15,6 @@ type Board struct {
 	Teams       []string
 }
 
-func (b Board) LastSprints(max int) ([]agile.Sprint, error) {
-	return b.JIRAService.LastSprints(max)
-}
-
 func (b Board) BoardOfTeam(team string) (agile.Board, error) {
 	return b.JIRAService.BoardOfTeam(team, MAX_SPRINTS)
 }
