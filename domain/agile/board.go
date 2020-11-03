@@ -6,13 +6,13 @@ import (
 
 type Board struct {
 	team    string
-	sprints []Sprint1
+	sprints []Sprint
 }
 
 func NewBoard(team string) Board {
 	return Board{
 		team:    team,
-		sprints: []Sprint1{},
+		sprints: []Sprint{},
 	}
 }
 
@@ -20,11 +20,11 @@ func (b Board) Team() string {
 	return b.team
 }
 
-func (b Board) Sprints() []Sprint1 {
+func (b Board) Sprints() []Sprint {
 	return b.sprints
 }
 
-func (b *Board) AddSprint(sprint Sprint1) {
+func (b *Board) AddSprint(sprint Sprint) {
 	b.sprints = append(b.sprints, sprint)
 }
 

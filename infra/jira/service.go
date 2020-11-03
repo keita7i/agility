@@ -41,12 +41,12 @@ func (s *Service) BoardOfTeam(team string, maxSprints int) (agile.Board, error) 
 	if to > len(rss) {
 		to = len(rss)
 	}
-	spCh := make(chan agile.Sprint1, maxSprints)
+	spCh := make(chan agile.Sprint, maxSprints)
 	eg, _ := errgroup.WithContext(context.TODO())
 	for _, rs := range rss[from:to] {
 		rst := rs
 		eg.Go(func() error {
-			sp, err := s.sprintB(s.TeamBoardIDs[team], rst.Name, rst.State == SprintClosed)
+			sp, err := s.sprint(s.TeamBoardIDs[team], rst.Name, rst.State == SprintClosed)
 			if err != nil {
 				return err
 			}
@@ -61,7 +61,7 @@ func (s *Service) BoardOfTeam(team string, maxSprints int) (agile.Board, error) 
 	if err != nil {
 		return agile.Board{}, err
 	}
-	var sps []agile.Sprint1
+	var sps []agile.Sprint
 	for sp := range spCh {
 		sps = append(sps, sp)
 	}
@@ -77,12 +77,12 @@ func (s *Service) BoardOfTeam(team string, maxSprints int) (agile.Board, error) 
 	return b, nil
 }
 
-func (s *Service) sprintB(boardID, sprint string, done bool) (agile.Sprint1, error) {
-	sp := agile.NewSprint1(sprint)
+func (s *Service) sprint(boardID, sprint string, done bool) (agile.Sprint, error) {
+	sp := agile.NewSprint(sprint)
 	sp.SetDone(done)
 	is, err := s.Client.Issues(boardID, sprint, done)
 	if err != nil {
-		return agile.Sprint1{}, err
+		return agile.Sprint{}, err
 	}
 	for _, i := range is {
 		var assignedSprints []Sprint
