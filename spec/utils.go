@@ -22,7 +22,7 @@ var defaultEnvironment = map[string]string{
 }
 
 func StartAgility(environment map[string]string) (*os.Process, error) {
-	cmd := exec.Command("go", "run", "github.com/keitam0/agility")
+	cmd := exec.Command("../agility")
 	cmd.Stdout = ginkgo.GinkgoWriter
 	cmd.Stderr = ginkgo.GinkgoWriter
 	env := map[string]string{}
