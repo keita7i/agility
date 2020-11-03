@@ -1,4 +1,4 @@
-package application
+package usecase
 
 import "github.com/keitam0/agility/agile"
 

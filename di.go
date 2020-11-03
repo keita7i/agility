@@ -7,11 +7,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v7"
-	"github.com/keitam0/agility/application"
 	"github.com/keitam0/agility/config"
 	"github.com/keitam0/agility/jira"
 	agredis "github.com/keitam0/agility/redis"
 	"github.com/keitam0/agility/rest"
+	"github.com/keitam0/agility/usecase"
 )
 
 type DI struct {
@@ -50,19 +50,19 @@ func (di DI) BoardHandler() *rest.BoardHandler {
 	}
 }
 
-func (di DI) ApplicationService() *application.Service {
+func (di DI) ApplicationService() *usecase.Service {
 	ids := di.Config().TeamBoardIDs0
 	var teams []string
 	for _, tbi := range ids {
 		teams = append(teams, tbi.Team)
 	}
-	return &application.Service{
+	return &usecase.Service{
 		JIRAService: di.JIRAService(),
 		Teams:       teams,
 	}
 }
 
-func (di DI) JIRAService() application.JIRAService {
+func (di DI) JIRAService() usecase.JIRAService {
 	return &jira.Service{
 		Client:       di.JIRAClient(),
 		TeamBoardIDs: di.Config().TeamBoardIDs,

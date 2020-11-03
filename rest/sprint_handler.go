@@ -3,15 +3,14 @@ package rest
 import (
 	"net/http"
 
-	"github.com/keitam0/agility/application"
-
 	"github.com/gin-gonic/gin"
+	"github.com/keitam0/agility/usecase"
 )
 
 const SHOW_SPRINTS = 8
 
 type SprintHandler struct {
-	ApplicationService *application.Service
+	ApplicationService *usecase.Service
 	Teams              []string
 }
 

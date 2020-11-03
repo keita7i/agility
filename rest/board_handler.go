@@ -4,11 +4,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/keitam0/agility/application"
+	"github.com/keitam0/agility/usecase"
 )
 
 type BoardHandler struct {
-	ApplicationService *application.Service
+	ApplicationService *usecase.Service
 }
 
 func (bh *BoardHandler) GET(ctx *gin.Context) {
