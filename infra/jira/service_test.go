@@ -4,8 +4,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/keitam0/agility/config"
-	"github.com/keitam0/agility/jira"
+	"github.com/keitam0/agility/infra/config"
+	"github.com/keitam0/agility/infra/jira"
 )
 
 func BenchmarkGetRawSprints(b *testing.B) {

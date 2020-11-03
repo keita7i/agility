@@ -7,10 +7,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v7"
-	"github.com/keitam0/agility/config"
-	"github.com/keitam0/agility/jira"
-	agredis "github.com/keitam0/agility/redis"
-	"github.com/keitam0/agility/rest"
+	"github.com/keitam0/agility/infra/config"
+	"github.com/keitam0/agility/infra/jira"
+	agredis "github.com/keitam0/agility/infra/redis"
+	"github.com/keitam0/agility/infra/rest"
 	"github.com/keitam0/agility/usecase"
 )
 
