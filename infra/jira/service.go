@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/keitam0/agility/agile"
+	"github.com/keitam0/agility/domain/agile"
 	"golang.org/x/sync/errgroup"
 )
 

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/keitam0/agility/agile"
+	"github.com/keitam0/agility/domain/agile"
 )
 
 const MAX_SPRINTS = 8
