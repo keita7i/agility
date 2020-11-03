@@ -49,7 +49,7 @@ func (di DI) JIRAService() usecase.JIRAService {
 func (di DI) JIRAClient() jira.Client {
 	conf := di.Config()
 	return &agredis.CachedJIRAClient{
-		JIRAClient:  jira.NewClient(conf.JIRAAPIEndpoint, conf.JIRAUsername, conf.JIRAPassword, conf.JIRABoardID),
+		JIRAClient:  jira.NewClient(conf.JIRAAPIEndpoint, conf.JIRAUsername, conf.JIRAPassword),
 		RedisClient: di.RedisClient(),
 	}
 }

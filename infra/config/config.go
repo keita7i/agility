@@ -10,7 +10,6 @@ type Config struct {
 	JIRAAPIEndpoint string
 	JIRAUsername    string
 	JIRAPassword    string
-	JIRABoardID     string
 	TeamBoardIDs    map[string]string
 	TeamBoardIDs0   []TeamBoardID
 	RedisAddrs      string
@@ -37,7 +36,6 @@ func FromEnv() (Config, error) {
 		JIRAAPIEndpoint: os.Getenv("JIRA_API_ENDPOINT"),
 		JIRAUsername:    os.Getenv("JIRA_USERNAME"),
 		JIRAPassword:    os.Getenv("JIRA_PASSWORD"),
-		JIRABoardID:     os.Getenv("JIRA_BOARD_ID"),
 		TeamBoardIDs:    bIDs,
 		TeamBoardIDs0:   bIDs0,
 		RedisAddrs:      os.Getenv("REDIS_ADDRS"),

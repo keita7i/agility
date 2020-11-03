@@ -26,65 +26,11 @@ type CachedJIRAClient struct {
 	RedisClient Client
 }
 
-func (c *CachedJIRAClient) Sprints() ([]jira.Sprint, error) {
-	var sprints []jira.Sprint
-	b, err := c.RedisClient.Get(SprintKey).Bytes()
-	if err == redis.Nil {
-		ss, err := c.JIRAClient.Sprints()
-		if err != nil {
-			return nil, err
-		}
-		b, err := json.Marshal(ss)
-		if err != nil {
-			return nil, err
-		}
-		if err := c.RedisClient.Set(SprintKey, b, SprintCacheExpiration).Err(); err != nil {
-			return nil, err
-		}
-		sprints = ss
-	} else if err != nil {
-		return nil, err
-	} else {
-		if err := json.Unmarshal(b, &sprints); err != nil {
-			return nil, err
-		}
-	}
-	return sprints, nil
-}
-
-func (c *CachedJIRAClient) Issues(sprint string, sprintDone bool) ([]jira.Issue, error) {
-	var issues []jira.Issue
-	b, err := c.RedisClient.Get(fmt.Sprintf(IssueKey, sprint)).Bytes()
-	if err == redis.Nil {
-		is, err := c.JIRAClient.Issues(sprint, sprintDone)
-		if err != nil {
-			return nil, err
-		}
-		b, err := json.Marshal(is)
-		if err != nil {
-			return nil, err
-		}
-		if sprintDone {
-			if err := c.RedisClient.Set(fmt.Sprintf(IssueKey, sprint), b, 0).Err(); err != nil {
-				return nil, err
-			}
-		}
-		issues = is
-	} else if err != nil {
-		return nil, err
-	} else {
-		if err := json.Unmarshal(b, &issues); err != nil {
-			return nil, err
-		}
-	}
-	return issues, nil
-}
-
-func (c *CachedJIRAClient) SprintsB(boardID string) ([]jira.Sprint, error) {
+func (c *CachedJIRAClient) Sprints(boardID string) ([]jira.Sprint, error) {
 	var sprints []jira.Sprint
 	b, err := c.RedisClient.Get(fmt.Sprintf(SprintKey, boardID)).Bytes()
 	if err == redis.Nil {
-		ss, err := c.JIRAClient.SprintsB(boardID)
+		ss, err := c.JIRAClient.Sprints(boardID)
 		if err != nil {
 			return nil, err
 		}
@@ -106,11 +52,11 @@ func (c *CachedJIRAClient) SprintsB(boardID string) ([]jira.Sprint, error) {
 	return sprints, nil
 }
 
-func (c *CachedJIRAClient) IssuesB(boardID string, sprint string, sprintDone bool) ([]jira.Issue, error) {
+func (c *CachedJIRAClient) Issues(boardID string, sprint string, sprintDone bool) ([]jira.Issue, error) {
 	var issues []jira.Issue
 	b, err := c.RedisClient.Get(fmt.Sprintf(IssueBKey, boardID, sprint)).Bytes()
 	if err == redis.Nil {
-		is, err := c.JIRAClient.IssuesB(boardID, sprint, sprintDone)
+		is, err := c.JIRAClient.Issues(boardID, sprint, sprintDone)
 		if err != nil {
 			return nil, err
 		}
