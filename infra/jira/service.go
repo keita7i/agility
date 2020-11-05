@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"sort"
-	"strconv"
 
 	"github.com/keitam0/agility/domain/agile"
 	"golang.org/x/sync/errgroup"
@@ -25,7 +24,7 @@ func (s *Service) BoardOfTeam(team string, maxSprints int) (agile.Board, error) 
 		return agile.Board{}, err
 	}
 	sort.Slice(rss, func(i, j int) bool {
-		return s.CompareSprint(rss[i], rss[j]) > 0
+		return agile.NewSprint(rss[j].Name).Less(agile.NewSprint(rss[i].Name))
 	})
 	from := len(rss)
 	for i, rs := range rss {
@@ -46,13 +45,19 @@ func (s *Service) BoardOfTeam(team string, maxSprints int) (agile.Board, error) 
 	for _, rs := range rss[from:to] {
 		rst := rs
 		eg.Go(func() error {
-			sp, err := s.sprint(s.TeamBoardIDs[team], rst.Name, rst.State == SprintClosed)
+			sp := agile.NewSprint(rst.Name)
+			if sp.IsStale() {
+				return nil
+			}
+			iss, err := s.issues(s.TeamBoardIDs[team], rst.Name)
 			if err != nil {
 				return err
 			}
-			if !sp.IsStale() {
-				spCh <- sp
+			for _, is := range iss {
+				sp.AddIssue(is)
 			}
+			sp.SetDone(rst.State == SprintClosed)
+			spCh <- sp
 			return nil
 		})
 	}
@@ -77,57 +82,22 @@ func (s *Service) BoardOfTeam(team string, maxSprints int) (agile.Board, error) 
 	return b, nil
 }
 
-func (s *Service) sprint(boardID, sprint string, done bool) (agile.Sprint, error) {
-	sp := agile.NewSprint(sprint)
-	sp.SetDone(done)
-	is, err := s.Client.Issues(boardID, sprint, done)
+func (s *Service) issues(boardID, sprint string) ([]agile.Issue, error) {
+	irs, err := s.Client.Issues(boardID, sprint, true)
 	if err != nil {
-		return agile.Sprint{}, err
+		return nil, err
 	}
-	for _, i := range is {
-		var assignedSprints []Sprint
-		if i.Fields.Sprint.Name != "" {
-			assignedSprints = append(assignedSprints, i.Fields.Sprint)
+	iss := []agile.Issue{}
+	for _, ir := range irs {
+		is := agile.NewIssue(int(ir.Fields.Size), ir.Fields.Labels)
+		is.SetStatus(ir.Fields.Status.Name)
+		if ir.Fields.Sprint.Name != "" {
+			is.AddSprint(ir.Fields.Sprint.Name)
 		}
-		assignedSprints = append(assignedSprints, i.Fields.ClosedSprints...)
-		closedSprint := ""
-		if isDoneStatus(i.Fields.Status.Name) && len(assignedSprints) > 0 {
-			latestSprint := assignedSprints[0]
-			for j := 1; j < len(i.Fields.ClosedSprints); j++ {
-				if s.CompareSprint(latestSprint, assignedSprints[j]) < 0 {
-					latestSprint = assignedSprints[j]
-				}
-			}
-			closedSprint = latestSprint.Name
+		for _, sp := range ir.Fields.ClosedSprints {
+			is.AddSprint(sp.Name)
 		}
-		sp.AddIssue(agile.NewIssue(int(i.Fields.Size), i.Fields.Labels, closedSprint))
+		iss = append(iss, is)
 	}
-	return sp, nil
-}
-
-func (s *Service) CompareSprint(l, r Sprint) int {
-	if !agile.SprintNameRegex.MatchString(l.Name) {
-		return -1
-	}
-	if !agile.SprintNameRegex.MatchString(r.Name) {
-		return 1
-	}
-	ls, err := strconv.Atoi(agile.SprintNameRegex.FindStringSubmatch(l.Name)[1])
-	if err != nil {
-		panic(err)
-	}
-	rs, err := strconv.Atoi(agile.SprintNameRegex.FindStringSubmatch(r.Name)[1])
-	if err != nil {
-		panic(err)
-	}
-	return ls - rs
-}
-
-func isDoneStatus(statusName string) bool {
-	switch statusName {
-	case "完了", "クローズ", "解決済み":
-		return true
-	default:
-		return false
-	}
+	return iss, nil
 }
